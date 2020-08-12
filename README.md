@@ -20,3 +20,15 @@ samples, guidance on mobile development, and a full API reference.
 flutter create project_name
 flutter doctor
 flutter run
+
+## folders
+.idea: for android studio
+android: android project, passive folder most time
+build folder: hold the output
+ios: for iOS project, won't work too much.
+lib: the folder we do 99% of the work. With main.dart file.
+test: allow to write automatic test.
+.metadata: managed by flutter, save some info
+.packages: generated automatically by flutter sdk, dependencies.
+pubspec.lock: manage dependencies, config dependencies that our project is using.
+pubspec.yaml: 
