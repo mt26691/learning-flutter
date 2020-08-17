@@ -23,9 +23,20 @@ class _MyAppState extends State<MyApp> {
   }
 
   var questions = [
-    'what is your name',
-    'where are you from',
+    {
+      'questionText': 'What is your name',
+      'answers': ['Tung', 'Bim']
+    },
+    {
+      'questionText': 'where are you from',
+      'answers': ['Vietnam', 'Da nang']
+    },
+    {
+      'questionText': 'What is your favorite color',
+      'answers': ['White', 'Black', 'Asian']
+    },
   ];
+
   @override
   Widget build(BuildContext context) {
     return MaterialApp(
@@ -35,16 +46,13 @@ class _MyAppState extends State<MyApp> {
         ),
         body: Column(
           children: [
-            Question(questions[_questionIndex]),
-            Answer(
-              selectHandler: _answerQuestion,
-            ),
-            Answer(
-              selectHandler: _answerQuestion,
-            ),
-            Answer(
-              selectHandler: _answerQuestion,
-            ),
+            Question(questions[_questionIndex]['questionText']),
+            ...(questions[_questionIndex]['answers'] as List<String>)
+                .map((answer) => Answer(
+                      selectHandler: _answerQuestion,
+                      answerText: answer,
+                    ))
+                .toList()
           ],
         ),
       ),
