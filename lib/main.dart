@@ -15,14 +15,14 @@ class MyApp extends StatefulWidget {
 
 class _MyAppState extends State<MyApp> {
   var _questionIndex = 0;
+
   void _answerQuestion() {
     setState(() {
       _questionIndex = _questionIndex + 1;
     });
-    print(_questionIndex);
   }
 
-  var questions = [
+  final questions = [
     {
       'questionText': 'What is your name',
       'answers': ['Tung', 'Bim']
@@ -44,17 +44,21 @@ class _MyAppState extends State<MyApp> {
         appBar: AppBar(
           title: Text('My first app'),
         ),
-        body: Column(
-          children: [
-            Question(questions[_questionIndex]['questionText']),
-            ...(questions[_questionIndex]['answers'] as List<String>)
-                .map((answer) => Answer(
-                      selectHandler: _answerQuestion,
-                      answerText: answer,
-                    ))
-                .toList()
-          ],
-        ),
+        body: _questionIndex < questions.length
+            ? Column(
+                children: [
+                  Question(questions[_questionIndex]['questionText']),
+                  ...(questions[_questionIndex]['answers'] as List<String>)
+                      .map((answer) => Answer(
+                            selectHandler: _answerQuestion,
+                            answerText: answer,
+                          ))
+                      .toList()
+                ],
+              )
+            : Center(
+                child: Text('You did it!'),
+              ),
       ),
     );
   }
