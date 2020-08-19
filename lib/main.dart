@@ -26,6 +26,13 @@ class _MyAppState extends State<MyApp> {
     });
   }
 
+  void _restartQuiz() {
+    setState(() {
+      _questionIndex = 0;
+    });
+    _totalScore = 0;
+  }
+
   final _questions = [
     {
       'questionText': 'What is your name',
@@ -67,6 +74,7 @@ class _MyAppState extends State<MyApp> {
               )
             : Result(
                 resultScore: _totalScore,
+                restartQuiz: _restartQuiz,
               ),
       ),
     );
