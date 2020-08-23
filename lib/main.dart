@@ -105,23 +105,25 @@ class _MyHomePageState extends State<MyHomePage> {
               onPressed: () => startNewTransaction(context)),
         ],
       ),
-      body: Column(
-        mainAxisAlignment: MainAxisAlignment.start,
-        children: <Widget>[
-          Container(
-            width: double.infinity,
-            child: Card(
-              child: Chart(
-                recentTransactions: _recentTransactions,
+      body: SingleChildScrollView(
+        child: Column(
+          mainAxisAlignment: MainAxisAlignment.start,
+          children: <Widget>[
+            Container(
+              width: double.infinity,
+              child: Card(
+                child: Chart(
+                  recentTransactions: _recentTransactions,
+                ),
+                elevation: 5,
               ),
-              elevation: 5,
             ),
-          ),
-          TransactionList(
-            transactions: this._userTransactions,
-            deleteTransaction: this.deleteTransaction,
-          )
-        ],
+            TransactionList(
+              transactions: this._userTransactions,
+              deleteTransaction: this.deleteTransaction,
+            )
+          ],
+        ),
       ),
       floatingActionButton: FloatingActionButton(
         child: Icon(Icons.add),
