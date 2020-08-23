@@ -32,8 +32,8 @@ class MyApp extends StatelessWidget {
         visualDensity: VisualDensity.adaptivePlatformDensity,
         fontFamily: 'OpenSans',
         textTheme: ThemeData.light().textTheme.copyWith(
-              title: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
-            ),
+            title: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),
+            button: TextStyle(color: Colors.white)),
         appBarTheme: AppBarTheme(
             textTheme: ThemeData.light().textTheme.copyWith(
                   title: TextStyle(fontSize: 20, fontWeight: FontWeight.bold),

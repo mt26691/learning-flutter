@@ -14,7 +14,7 @@ class _NewTransactionState extends State<NewTransaction> {
 
   final amountController = TextEditingController();
 
-  void submitData() {
+  void _submitData() {
     final enteredTitle = this.titleController.text;
     final enteredAmount = double.parse(this.amountController.text);
 
@@ -26,6 +26,15 @@ class _NewTransactionState extends State<NewTransaction> {
         this.titleController.text, double.parse(this.amountController.text));
 
     Navigator.of(context).pop();
+  }
+
+  void _presentDatePicker() {
+    showDatePicker(
+      context: context,
+      initialDate: DateTime.now(),
+      firstDate: DateTime(2020),
+      lastDate: DateTime(2021),
+    );
   }
 
   @override
@@ -45,13 +54,32 @@ class _NewTransactionState extends State<NewTransaction> {
               decoration: InputDecoration(labelText: 'Amount'),
               keyboardType: TextInputType.numberWithOptions(decimal: true),
               controller: amountController,
-              onSubmitted: (value) => {this.submitData()},
+              onSubmitted: (value) => {this._submitData()},
             ),
-            FlatButton(
+            Container(
+              height: 70,
+              child: Row(
+                children: [
+                  Text('No date chosen!'),
+                  FlatButton(
+                    textColor: Theme.of(context).primaryColor,
+                    onPressed: _presentDatePicker,
+                    child: Text(
+                      'Choose Date',
+                      style: TextStyle(
+                        fontWeight: FontWeight.bold,
+                      ),
+                    ),
+                  )
+                ],
+              ),
+            ),
+            RaisedButton(
               child: Text('Add Transaction'),
-              textColor: Theme.of(context).primaryColor,
+              color: Theme.of(context).primaryColor,
+              textColor: Theme.of(context).textTheme.button.color,
               onPressed: () {
-                this.submitData();
+                this._submitData();
               },
             )
           ],
