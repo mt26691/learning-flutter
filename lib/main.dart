@@ -98,6 +98,66 @@ class _MyHomePageState extends State<MyHomePage> {
         });
   }
 
+  List<Widget> _buildLandscapeContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return <Widget>[
+      Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          Text(
+            'Show chart',
+            style: Theme.of(context).textTheme.title,
+          ),
+          // if we use switch.adaptive, it will switch to things that specific to os
+          // likes os
+          Switch.adaptive(
+              activeColor: Theme.of(context).accentColor,
+              value: showChart,
+              onChanged: (val) {
+                setState(() {
+                  showChart = val;
+                });
+              })
+        ],
+      ),
+      showChart
+          ? Container(
+              width: double.infinity,
+              height: (mediaQuery.size.height -
+                      appBar.preferredSize.height -
+                      mediaQuery.padding.top) *
+                  0.7,
+              child: Card(
+                child: Chart(
+                  recentTransactions: _recentTransactions,
+                ),
+                elevation: 5,
+              ),
+            )
+          : txListWidget
+    ];
+  }
+
+  List<Widget> _buildPortraitContent(
+      MediaQueryData mediaQuery, AppBar appBar, Widget txListWidget) {
+    return <Widget>[
+      Container(
+        width: double.infinity,
+        height: (mediaQuery.size.height -
+                appBar.preferredSize.height -
+                mediaQuery.padding.top) *
+            0.3,
+        child: Card(
+          child: Chart(
+            recentTransactions: _recentTransactions,
+          ),
+          elevation: 5,
+        ),
+      ),
+      txListWidget
+    ];
+  }
+
   bool showChart = false;
   @override
   Widget build(BuildContext context) {
@@ -142,56 +202,9 @@ class _MyHomePageState extends State<MyHomePage> {
         mainAxisAlignment: MainAxisAlignment.start,
         children: <Widget>[
           if (isLandscape)
-            Row(
-              mainAxisAlignment: MainAxisAlignment.center,
-              children: [
-                Text(
-                  'Show chart',
-                  style: Theme.of(context).textTheme.title,
-                ),
-                // if we use switch.adaptive, it will switch to things that specific to os
-                // likes os
-                Switch.adaptive(
-                    activeColor: Theme.of(context).accentColor,
-                    value: showChart,
-                    onChanged: (val) {
-                      setState(() {
-                        showChart = val;
-                      });
-                    })
-              ],
-            ),
+            ..._buildLandscapeContent(mediaQuery, appBar, txListWidget),
           if (!isLandscape)
-            Container(
-              width: double.infinity,
-              height: (mediaQuery.size.height -
-                      appBar.preferredSize.height -
-                      mediaQuery.padding.top) *
-                  0.3,
-              child: Card(
-                child: Chart(
-                  recentTransactions: _recentTransactions,
-                ),
-                elevation: 5,
-              ),
-            ),
-          if (!isLandscape) txListWidget,
-          if (isLandscape)
-            showChart
-                ? Container(
-                    width: double.infinity,
-                    height: (mediaQuery.size.height -
-                            appBar.preferredSize.height -
-                            mediaQuery.padding.top) *
-                        0.7,
-                    child: Card(
-                      child: Chart(
-                        recentTransactions: _recentTransactions,
-                      ),
-                      elevation: 5,
-                    ),
-                  )
-                : txListWidget
+            ..._buildPortraitContent(mediaQuery, appBar, txListWidget),
         ],
       ),
     ));
