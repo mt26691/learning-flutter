@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/widgets/transaction_item.dart';
 import '../models/transaction.dart';
-import 'package:intl/intl.dart';
 
 class TransactionList extends StatelessWidget {
   final List<Transaction> transactions;
@@ -19,7 +19,7 @@ class TransactionList extends StatelessWidget {
                     'No Transactions added yet',
                     style: Theme.of(context).textTheme.title,
                   ),
-                  SizedBox(
+                  const SizedBox(
                     height: 50,
                   ),
                   Container(
@@ -35,37 +35,8 @@ class TransactionList extends StatelessWidget {
           : ListView.builder(
               itemBuilder: (context, index) {
                 var tx = transactions[index];
-                return Card(
-                  margin: EdgeInsets.symmetric(vertical: 8, horizontal: 5),
-                  child: ListTile(
-                    leading: CircleAvatar(
-                      radius: 30,
-                      child: Padding(
-                        padding: EdgeInsets.all(5),
-                        child: FittedBox(
-                            child: Text('\$${tx.amount.toStringAsFixed(1)}')),
-                      ),
-                    ),
-                    title: Text(tx.title,
-                        style: Theme.of(context).textTheme.title),
-                    subtitle: Text(DateFormat.yMMMd().format(tx.date)),
-                    trailing: MediaQuery.of(context).size.width > 460
-                        ? FlatButton.icon(
-                            onPressed: () {
-                              this.deleteTransaction(tx.id);
-                            },
-                            icon: Icon(Icons.delete),
-                            textColor: Theme.of(context).errorColor,
-                            label: Text('Delete'))
-                        : IconButton(
-                            icon: Icon(Icons.delete),
-                            color: Theme.of(context).errorColor,
-                            onPressed: () {
-                              this.deleteTransaction(tx.id);
-                            },
-                          ),
-                  ),
-                );
+                return TransactionItem(
+                    transaction: tx, deleteTransaction: deleteTransaction);
               },
               itemCount: transactions.length,
             ),
