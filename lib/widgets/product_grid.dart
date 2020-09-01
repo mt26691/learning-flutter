@@ -22,10 +22,9 @@ class ProductGrid extends StatelessWidget {
       ),
       itemBuilder: (context, index) {
         final currentProduct = products[index];
-        return ProductItem(
-            id: currentProduct.id,
-            imageUrl: currentProduct.imageUrl,
-            title: currentProduct.title);
+        // when you are using an existing object like this, you should use value
+        return ChangeNotifierProvider.value(
+            value: currentProduct, child: ProductItem());
       },
       itemCount: products.length,
     );
