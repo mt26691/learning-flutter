@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/providers/cart.dart';
 import 'package:learn_flutter/providers/products.dart';
 import 'package:provider/provider.dart';
 import 'package:learn_flutter/screens/products_overview_screen.dart';
@@ -14,10 +15,17 @@ class MyApp extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
     // when create new object, we should use ChangeNotifierProvider
-    return ChangeNotifierProvider(
-      create: (context) {
-        return Products();
-      },
+    return MultiProvider(
+      providers: [
+        ChangeNotifierProvider(
+          create: (context) {
+            return Products();
+          },
+        ),
+        ChangeNotifierProvider.value(
+          value: Cart(),
+        )
+      ],
       child: MaterialApp(
         title: 'My Shop',
         theme: ThemeData(
