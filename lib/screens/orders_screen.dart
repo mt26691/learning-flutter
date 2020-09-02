@@ -1,9 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/providers/orders.dart';
+import 'package:learn_flutter/widgets/app_drawer.dart';
 import 'package:learn_flutter/widgets/order_item.dart';
 import 'package:provider/provider.dart';
 
 class OrdersScreen extends StatelessWidget {
+  static const routeName = '/order';
   @override
   Widget build(BuildContext context) {
     final orderData = Provider.of<Orders>(context);
@@ -11,6 +13,7 @@ class OrdersScreen extends StatelessWidget {
       appBar: AppBar(
         title: Text('Your order'),
       ),
+      drawer: AppDrawer(),
       body: ListView.builder(
         itemBuilder: (context, index) {
           final currentOrder = orderData.orders[index];
