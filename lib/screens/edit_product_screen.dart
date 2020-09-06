@@ -90,7 +90,7 @@ class _EditProductScreenState extends State<EditProductScreen> {
     }
   }
 
-  void _saveForm() {
+  Future<void> _saveForm() async {
     if (!_form.currentState.validate()) {
       return;
     }
@@ -106,8 +106,11 @@ class _EditProductScreenState extends State<EditProductScreen> {
         _isLoading = false;
       });
     } else {
-      products.addProduct(_editedProduct).catchError((error) {
-        return showDialog(
+      try {
+        await Provider.of<Products>(context, listen: false)
+            .addProduct(_editedProduct);
+      } catch (error) {
+        await showDialog(
           context: context,
           builder: (ctx) => AlertDialog(
             title: Text('An error occurred!'),
@@ -122,12 +125,12 @@ class _EditProductScreenState extends State<EditProductScreen> {
             ],
           ),
         );
-      }).then((value) {
+      } finally {
         setState(() {
           _isLoading = false;
         });
         Navigator.of(context).pop();
-      });
+      }
     }
   }
 
@@ -139,8 +142,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
         actions: [
           IconButton(
             icon: Icon(Icons.save),
-            onPressed: () {
-              _saveForm();
+            onPressed: () async {
+              await _saveForm();
             },
           )
         ],
@@ -268,8 +271,8 @@ class _EditProductScreenState extends State<EditProductScreen> {
                               textInputAction: TextInputAction.done,
                               controller: _imageUrlController,
                               focusNode: _imageFocusNode,
-                              onFieldSubmitted: (value) {
-                                _saveForm();
+                              onFieldSubmitted: (value) async {
+                                await _saveForm();
                               },
                               onSaved: (newValue) {
                                 _editedProduct = Product(
