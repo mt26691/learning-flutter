@@ -71,22 +71,22 @@ class Products with ChangeNotifier {
     const url = 'https://flutter-demo-b8867.firebaseio.com/products.json';
     try {
       final response = await http.get(url);
-      final extractData = json.decode(response.body) as Map<String, dynamic>;
+      final extractedData = json.decode(response.body) as Map<String, dynamic>;
       final List<Product> loadedProducts = [];
-      extractData.forEach((productId, productData) {
+      extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
-          id: productId,
-          title: productData['title'],
-          description: productData['description'],
-          price: productData['price'],
-          imageUrl: productData['imageUrl'],
-          isFavorite: productData['isFavorite'],
+          id: prodId,
+          title: prodData['title'],
+          description: prodData['description'],
+          price: prodData['price'],
+          isFavorite: prodData['isFavorite'],
+          imageUrl: prodData['imageUrl'],
         ));
       });
       _items = loadedProducts;
       notifyListeners();
     } catch (error) {
-      throw error;
+      throw (error);
     }
   }
 
