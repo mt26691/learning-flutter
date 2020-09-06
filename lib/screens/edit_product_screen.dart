@@ -106,11 +106,27 @@ class _EditProductScreenState extends State<EditProductScreen> {
         _isLoading = false;
       });
     } else {
-      products.addProduct(_editedProduct).then((_) {
-        Navigator.of(context).pop();
+      products.addProduct(_editedProduct).catchError((error) {
+        return showDialog(
+          context: context,
+          builder: (ctx) => AlertDialog(
+            title: Text('An error occurred!'),
+            content: Text('Something went wrong.'),
+            actions: <Widget>[
+              FlatButton(
+                child: Text('Okay'),
+                onPressed: () {
+                  Navigator.of(ctx).pop();
+                },
+              )
+            ],
+          ),
+        );
+      }).then((value) {
         setState(() {
           _isLoading = false;
         });
+        Navigator.of(context).pop();
       });
     }
   }
