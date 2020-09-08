@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/providers/auth.dart';
 import 'package:learn_flutter/providers/cart.dart';
 import 'package:learn_flutter/providers/orders.dart';
 import 'package:learn_flutter/providers/products.dart';
@@ -34,6 +35,11 @@ class MyApp extends StatelessWidget {
         ChangeNotifierProvider(
           create: (context) {
             return Orders();
+          },
+        ),
+        ChangeNotifierProvider(
+          create: (context) {
+            return Auth();
           },
         ),
       ],
