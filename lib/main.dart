@@ -26,7 +26,14 @@ class MyApp extends StatelessWidget {
       providers: [
         ChangeNotifierProvider(
           create: (context) {
-            return Products();
+            return Auth();
+          },
+        ),
+        ChangeNotifierProxyProvider<Auth, Products>(
+          create: null,
+          update: (context, auth, previousProducts) {
+            return Products(auth.token,
+                previousProducts == null ? [] : previousProducts.items);
           },
         ),
         ChangeNotifierProvider.value(
@@ -37,39 +44,40 @@ class MyApp extends StatelessWidget {
             return Orders();
           },
         ),
-        ChangeNotifierProvider(
-          create: (context) {
-            return Auth();
-          },
-        ),
       ],
-      child: MaterialApp(
-        title: 'My Shop',
-        theme: ThemeData(
-          // This is the theme of your application.
-          //
-          // Try running your application with "flutter run". You'll see the
-          // application has a blue toolbar. Then, without quitting the app, try
-          // changing the primarySwatch below to Colors.green and then invoke
-          // "hot reload" (press "r" in the console where you ran "flutter run",
-          // or simply save your changes to "hot reload" in a Flutter IDE).
-          // Notice that the counter didn't reset back to zero; the application
-          // is not restarted.
-          primarySwatch: Colors.purple,
-          accentColor: Colors.deepOrange,
-          fontFamily: 'Lato',
-          // This makes the visual density adapt to the platform that you run
-          // the app on. For desktop platforms, the controls will be smaller and
-          // closer together (more dense) than on mobile platforms.
-          visualDensity: VisualDensity.adaptivePlatformDensity,
-        ),
-        home: AuthScreen(),
-        routes: {
-          ProductDetailScreen.routeName: (cxt) => ProductDetailScreen(),
-          CartScreen.routeName: (cxt) => CartScreen(),
-          OrdersScreen.routeName: (cxt) => OrdersScreen(),
-          UserProductsScreen.routeName: (cxt) => UserProductsScreen(),
-          EditProductScreen.routeName: (cxt) => EditProductScreen(),
+      child: Consumer<Auth>(
+        builder: (context, authData, child) {
+          return MaterialApp(
+            title: 'My Shop',
+            theme: ThemeData(
+              // This is the theme of your application.
+              //
+              // Try running your application with "flutter run". You'll see the
+              // application has a blue toolbar. Then, without quitting the app, try
+              // changing the primarySwatch below to Colors.green and then invoke
+              // "hot reload" (press "r" in the console where you ran "flutter run",
+              // or simply save your changes to "hot reload" in a Flutter IDE).
+              // Notice that the counter didn't reset back to zero; the application
+              // is not restarted.
+              primarySwatch: Colors.purple,
+              accentColor: Colors.deepOrange,
+              fontFamily: 'Lato',
+              // This makes the visual density adapt to the platform that you run
+              // the app on. For desktop platforms, the controls will be smaller and
+              // closer together (more dense) than on mobile platforms.
+              visualDensity: VisualDensity.adaptivePlatformDensity,
+            ),
+            home: authData.isAuthenticated
+                ? ProductsOverviewScreen()
+                : AuthScreen(),
+            routes: {
+              ProductDetailScreen.routeName: (cxt) => ProductDetailScreen(),
+              CartScreen.routeName: (cxt) => CartScreen(),
+              OrdersScreen.routeName: (cxt) => OrdersScreen(),
+              UserProductsScreen.routeName: (cxt) => UserProductsScreen(),
+              EditProductScreen.routeName: (cxt) => EditProductScreen(),
+            },
+          );
         },
       ),
     );

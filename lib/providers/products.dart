@@ -41,6 +41,8 @@ class Products with ChangeNotifier {
     // ),
   ];
 
+  Products(this.authToken, this._items);
+
   // var _showFavoriteOnly = false;
 
   List<Product> get items {
@@ -60,6 +62,8 @@ class Products with ChangeNotifier {
   //   notifyListeners();
   // }
 
+  final String authToken;
+
   List<Product> get favoriteItems {
     return _items.where((element) => element.isFavorite).toList();
   }
@@ -69,7 +73,8 @@ class Products with ChangeNotifier {
   }
 
   Future<void> fetchAndSetProducts() async {
-    const url = 'https://flutter-demo-b8867.firebaseio.com/products.json';
+    final url =
+        'https://flutter-demo-b8867.firebaseio.com/products.json?auth=$authToken';
     try {
       final response = await http.get(url);
       final extractedData = json.decode(response.body) as Map<String, dynamic>;
