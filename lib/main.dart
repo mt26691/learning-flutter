@@ -7,6 +7,7 @@ import 'package:learn_flutter/screens/auth_screen.dart';
 import 'package:learn_flutter/screens/cart_screen.dart';
 import 'package:learn_flutter/screens/edit_product_screen.dart';
 import 'package:learn_flutter/screens/orders_screen.dart';
+import 'package:learn_flutter/screens/splash_screen.dart';
 import 'package:learn_flutter/screens/user_products_screen.dart';
 import 'package:provider/provider.dart';
 import 'package:learn_flutter/screens/products_overview_screen.dart';
@@ -73,7 +74,15 @@ class MyApp extends StatelessWidget {
             ),
             home: authData.isAuthenticated
                 ? ProductsOverviewScreen()
-                : AuthScreen(),
+                : FutureBuilder(
+                    builder: (context, snapshot) {
+                      if (snapshot.connectionState == ConnectionState.waiting) {
+                        return SplashScreen();
+                      }
+                      return AuthScreen();
+                    },
+                    future: authData.tryAutoLogin(),
+                  ),
             routes: {
               ProductDetailScreen.routeName: (cxt) => ProductDetailScreen(),
               CartScreen.routeName: (cxt) => CartScreen(),
