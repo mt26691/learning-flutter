@@ -8,17 +8,18 @@ import 'package:learn_flutter/model/http_exception.dart';
 class Orders with ChangeNotifier {
   List<OrderItem> _orders = [];
 
-  Orders(this.authToken, this._orders);
+  Orders(this.authToken, this.userId, this._orders);
 
   List<OrderItem> get orders {
     return [..._orders];
   }
 
   final String authToken;
+  final String userId;
 
   Future<void> addOrder(List<CartItem> cartProducts, double total) async {
     final url =
-        'https://flutter-demo-b8867.firebaseio.com/orders.json?auth$authToken';
+        'https://flutter-demo-b8867.firebaseio.com/orders/$userId.json?auth$authToken';
 
     final timeStamp = DateTime.now();
 
@@ -54,7 +55,7 @@ class Orders with ChangeNotifier {
 
   Future<void> fetchAndSetOrders() async {
     final url =
-        'https://flutter-demo-b8867.firebaseio.com/orders.json?auth=$authToken';
+        'https://flutter-demo-b8867.firebaseio.com/orders/$userId.json?auth=$authToken';
     try {
       final response = await http.get(url);
 
