@@ -41,7 +41,7 @@ class ProductItem extends StatelessWidget {
           leading: Consumer<Product>(
             builder: (context, changedProduct, child) {
               return IconButton(
-                icon: changedProduct.isFavorite
+                icon: (changedProduct.isFavorite ?? false)
                     ? Icon(Icons.favorite)
                     : Icon(Icons.favorite_border),
                 // label: child => it will take Text('Never changes')
