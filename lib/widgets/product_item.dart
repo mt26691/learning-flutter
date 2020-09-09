@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:learn_flutter/providers/auth.dart';
 import 'package:learn_flutter/providers/cart.dart';
 import 'package:learn_flutter/providers/product.dart';
 import 'package:learn_flutter/screens/product_detail_screen.dart';
@@ -16,6 +17,7 @@ class ProductItem extends StatelessWidget {
   Widget build(BuildContext context) {
     final product = Provider.of<Product>(context, listen: false);
     final cart = Provider.of<Cart>(context, listen: false);
+    final authData = Provider.of<Auth>(context, listen: false);
     print('product rebuilt');
     return ClipRRect(
       borderRadius: BorderRadius.circular(10),
@@ -44,7 +46,7 @@ class ProductItem extends StatelessWidget {
                     : Icon(Icons.favorite_border),
                 // label: child => it will take Text('Never changes')
                 onPressed: () {
-                  changedProduct.toggleFavoriteStatus();
+                  changedProduct.toggleFavoriteStatus(authData.token);
                 },
                 color: Theme.of(context).accentColor,
               );
