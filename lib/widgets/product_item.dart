@@ -46,7 +46,8 @@ class ProductItem extends StatelessWidget {
                     : Icon(Icons.favorite_border),
                 // label: child => it will take Text('Never changes')
                 onPressed: () {
-                  changedProduct.toggleFavoriteStatus(authData.token);
+                  changedProduct.toggleFavoriteStatus(
+                      authData.token, authData.userId);
                 },
                 color: Theme.of(context).accentColor,
               );

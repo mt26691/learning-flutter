@@ -41,7 +41,7 @@ class Products with ChangeNotifier {
     // ),
   ];
 
-  Products(this.authToken, this._items);
+  Products(this.authToken, this.userId, this._items);
 
   // var _showFavoriteOnly = false;
 
@@ -63,6 +63,7 @@ class Products with ChangeNotifier {
   // }
 
   final String authToken;
+  final String userId;
 
   List<Product> get favoriteItems {
     return _items.where((element) => element.isFavorite).toList();
@@ -81,16 +82,24 @@ class Products with ChangeNotifier {
       if (extractedData == null) {
         return;
       }
+
+      final favoriteUrl =
+          'https://flutter-demo-b8867.firebaseio.com/userFavorites/$userId.json?auth=$authToken';
+
+      final favoriteResponse = await http.get(favoriteUrl);
+      final favoriteData = json.decode(favoriteResponse.body);
+
       final List<Product> loadedProducts = [];
       extractedData.forEach((prodId, prodData) {
         loadedProducts.add(Product(
-          id: prodId,
-          title: prodData['title'],
-          description: prodData['description'],
-          price: prodData['price'],
-          isFavorite: prodData['isFavorite'],
-          imageUrl: prodData['imageUrl'],
-        ));
+                id: prodId,
+                title: prodData['title'],
+                description: prodData['description'],
+                price: prodData['price'],
+                imageUrl: prodData['imageUrl'],
+                isFavorite:
+                    favoriteData == null ? false : favoriteData[prodId]) ??
+            false);
       });
       _items = loadedProducts;
       notifyListeners();
@@ -110,7 +119,6 @@ class Products with ChangeNotifier {
           'description': product.description,
           'imageUrl': product.imageUrl,
           'price': product.price,
-          'isFavorite': product.isFavorite,
         }),
       );
 
