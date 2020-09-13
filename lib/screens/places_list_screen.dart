@@ -18,34 +18,42 @@ class PlacesListScreen extends StatelessWidget {
           ),
         ],
       ),
-      body: Center(
-        child: Consumer<GreatPlaces>(
-          builder: (context, greatPlaces, child) {
-            if (greatPlaces.items.length <= 0) {
-              return child;
+      body: FutureBuilder(
+          future: Provider.of<GreatPlaces>(context, listen: false)
+              .fetchAndSetPlaces(),
+          builder: (context, snapshot) {
+            if (snapshot.connectionState == ConnectionState.waiting) {
+              return Center(
+                child: CircularProgressIndicator(),
+              );
             }
-            return ListView.builder(
-              itemBuilder: (context, index) {
-                return ListTile(
-                  leading: CircleAvatar(
-                    backgroundImage: FileImage(
-                      greatPlaces.items[index].image,
-                    ),
-                  ),
-                  title: Text(greatPlaces.items[index].title),
-                  onTap: () {
-                    // TODO go to detail pages
+            return Consumer<GreatPlaces>(
+              builder: (context, greatPlaces, child) {
+                if (greatPlaces.items.length <= 0) {
+                  return child;
+                }
+                return ListView.builder(
+                  itemBuilder: (context, index) {
+                    return ListTile(
+                      leading: CircleAvatar(
+                        backgroundImage: FileImage(
+                          greatPlaces.items[index].image,
+                        ),
+                      ),
+                      title: Text(greatPlaces.items[index].title),
+                      onTap: () {
+                        // TODO go to detail pages
+                      },
+                    );
                   },
+                  itemCount: greatPlaces.items.length,
                 );
               },
-              itemCount: greatPlaces.items.length,
+              child: Center(
+                child: Text('Got No places now, start adding some!'),
+              ),
             );
-          },
-          child: Center(
-            child: Text('Got No places now, start adding some!'),
-          ),
-        ),
-      ),
+          }),
     );
   }
 }
