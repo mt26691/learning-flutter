@@ -21,7 +21,7 @@ class PlacesListScreen extends StatelessWidget {
       body: Center(
         child: Consumer<GreatPlaces>(
           builder: (context, greatPlaces, child) {
-            if (greatPlaces.items.length == 0) {
+            if (greatPlaces.items.length <= 0) {
               return child;
             }
             return ListView.builder(

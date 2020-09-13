@@ -7,7 +7,7 @@ class GreatPlaces with ChangeNotifier {
   List<Place> _items = [];
 
   List<Place> get items {
-    return [...items];
+    return [..._items];
   }
 
   void addPlace(String title, File image) {
