@@ -5,6 +5,10 @@ import 'package:learn_flutter/screens/map_screen.dart';
 import 'package:location/location.dart';
 
 class LocationInput extends StatefulWidget {
+  final Function onSelectPlace;
+
+  LocationInput(this.onSelectPlace);
+
   @override
   _LocationInputState createState() => _LocationInputState();
 }
@@ -17,6 +21,7 @@ class _LocationInputState extends State<LocationInput> {
       latitude: locData.latitude,
       longitude: locData.longitude,
     );
+    widget.onSelectPlace(locData.latitude, locData.longitude);
     setState(() {
       _previewImageUrl = staticMapImageUrl;
     });
@@ -36,6 +41,7 @@ class _LocationInputState extends State<LocationInput> {
     if (selectedLocation == null) {
       return;
     }
+    widget.onSelectPlace(selectedLocation.latitude, selectedLocation.longitude);
   }
 
   @override
