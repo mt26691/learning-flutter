@@ -1,6 +1,9 @@
 import 'package:flutter/material.dart';
 
 class AuthForm extends StatefulWidget {
+  final void Function(
+      String email, String password, String username, bool isLogin) _submitFn;
+  AuthForm(this._submitFn);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -21,6 +24,7 @@ class _AuthFormState extends State<AuthForm> {
       return;
     }
     _formKey.currentState.save();
+    widget._submitFn(_userEmail, _userPassword, _userName, _isLogin);
     // User those value to send auth request to firebase
   }
 
