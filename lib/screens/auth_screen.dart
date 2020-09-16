@@ -1,6 +1,6 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:learn_flutter/widgets/auth/auth_form.dart';
 
 class AuthScreen extends StatefulWidget {
@@ -11,28 +11,43 @@ class AuthScreen extends StatefulWidget {
 class _AuthScreenState extends State<AuthScreen> {
   final FirebaseAuth _auth = FirebaseAuth.instance;
 
+  var _isLoading = false;
+
   Future<void> _submitAuthForm(String email, String password, String username,
       bool isLogin, BuildContext currentContext) async {
     UserCredential _authResult;
 
     try {
+      setState(() {
+        _isLoading = true;
+      });
       if (isLogin) {
         _authResult = await _auth.signInWithEmailAndPassword(
             email: email, password: password);
       } else {
         _authResult = await _auth.createUserWithEmailAndPassword(
             email: email, password: password);
+        await FirebaseFirestore.instance
+            .collection('users')
+            .doc(_authResult.user.uid)
+            .set({'username': username, 'email': email});
       }
+      setState(() {
+        _isLoading = false;
+      });
     } on FirebaseAuthException catch (err) {
       var message = 'An error occurd, please check your credentail';
 
       if (err.message != null) {
         message = err.message;
       }
-      Scaffold.of(context).showSnackBar(SnackBar(
+      Scaffold.of(currentContext).showSnackBar(SnackBar(
         content: Text(message),
         backgroundColor: Theme.of(currentContext).errorColor,
       ));
+      setState(() {
+        _isLoading = false;
+      });
     }
   }
 
@@ -40,7 +55,7 @@ class _AuthScreenState extends State<AuthScreen> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: Theme.of(context).primaryColor,
-      body: AuthForm(_submitAuthForm),
+      body: AuthForm(_submitAuthForm, _isLoading),
     );
   }
 }

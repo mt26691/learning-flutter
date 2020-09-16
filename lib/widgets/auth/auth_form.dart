@@ -3,7 +3,8 @@ import 'package:flutter/material.dart';
 class AuthForm extends StatefulWidget {
   final void Function(String email, String password, String username,
       bool isLogin, BuildContext currentContext) _submitFn;
-  AuthForm(this._submitFn);
+  bool _isLoading;
+  AuthForm(this._submitFn, this._isLoading);
   @override
   _AuthFormState createState() => _AuthFormState();
 }
@@ -93,22 +94,28 @@ class _AuthFormState extends State<AuthForm> {
                     SizedBox(
                       height: 12,
                     ),
-                    RaisedButton(
-                      onPressed: () {
-                        _trySubmit();
-                      },
-                      child: Text(_isLogin ? 'Login' : 'Signup'),
-                    ),
-                    FlatButton(
+                    if (widget._isLoading)
+                      Center(
+                        child: CircularProgressIndicator(),
+                      ),
+                    if (!widget._isLoading)
+                      RaisedButton(
                         onPressed: () {
-                          setState(() {
-                            _isLogin = !_isLogin;
-                          });
+                          _trySubmit();
                         },
-                        textColor: Theme.of(context).primaryColor,
-                        child: _isLogin
-                            ? Text('Create new account')
-                            : Text('I already have an ccount'))
+                        child: Text(_isLogin ? 'Login' : 'Signup'),
+                      ),
+                    if (!widget._isLoading)
+                      FlatButton(
+                          onPressed: () {
+                            setState(() {
+                              _isLogin = !_isLogin;
+                            });
+                          },
+                          textColor: Theme.of(context).primaryColor,
+                          child: _isLogin
+                              ? Text('Create new account')
+                              : Text('I already have an ccount'))
                   ],
                 )),
           ),

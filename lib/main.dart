@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/screens/auth_screen.dart';
-import 'package:learn_flutter/screens/chat_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 
 bool USE_FIRESTORE_EMULATOR = false;
