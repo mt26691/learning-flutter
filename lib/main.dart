@@ -1,7 +1,9 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
+import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/screens/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
+import 'package:learn_flutter/screens/chat_screen.dart';
 
 bool USE_FIRESTORE_EMULATOR = false;
 
@@ -45,6 +47,14 @@ class MyApp extends StatelessWidget {
           // closer together (more dense) than on mobile platforms.
           visualDensity: VisualDensity.adaptivePlatformDensity,
         ),
-        home: AuthScreen());
+        home: StreamBuilder(
+          stream: FirebaseAuth.instance.authStateChanges(),
+          builder: (context, userSnapShot) {
+            if (userSnapShot.hasData) {
+              return ChatScreen();
+            }
+            return AuthScreen();
+          },
+        ));
   }
 }
