@@ -23,6 +23,8 @@ class Messages extends StatelessWidget {
               isMe: currentDocument['userId'] ==
                   FirebaseAuth.instance.currentUser.uid,
               key: ValueKey(currentDocument['id']),
+              userId: FirebaseAuth.instance.currentUser.uid,
+              username: currentDocument['username'],
             );
           },
           itemCount: chatSnapshot.data.documents.length,
