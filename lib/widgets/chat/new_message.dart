@@ -23,6 +23,7 @@ class _NewMessageState extends State<NewMessage> {
       'createdAt': DateTime.now(),
       'userId': FirebaseAuth.instance.currentUser.uid,
       'username': userData.data()['username'],
+      'userImage': userData.data()['image_url'],
     });
     _controller.clear();
   }

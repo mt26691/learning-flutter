@@ -49,9 +49,6 @@ class _AuthScreenState extends State<AuthScreen> {
           'image_url': url,
         });
       }
-      setState(() {
-        _isLoading = false;
-      });
     } on FirebaseAuthException catch (err) {
       var message = 'An error occurd, please check your credentail';
 
