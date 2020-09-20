@@ -1,9 +1,11 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:learn_flutter/widgets/pickers/user_image_picker.dart';
 
 class AuthForm extends StatefulWidget {
   final void Function(String email, String password, String username,
-      bool isLogin, BuildContext currentContext) _submitFn;
+      File image, bool isLogin, BuildContext currentContext) _submitFn;
   bool _isLoading;
   AuthForm(this._submitFn, this._isLoading);
   @override
@@ -17,18 +19,31 @@ class _AuthFormState extends State<AuthForm> {
   var _userEmail = '';
   var _userName = '';
   var _userPassword = '';
-
+  File _userImageFile;
   void _trySubmit() {
-    final isValid = _formKey.currentState.validate();
     // remove all focus, so keyboard can be closed.
     FocusScope.of(context).unfocus();
+    if (!_isLogin && _userImageFile == null) {
+      Scaffold.of(context).showSnackBar(SnackBar(
+        content: Text('Please pick an image'),
+        backgroundColor: Theme.of(context).errorColor,
+      ));
+      return;
+    }
+
+    final isValid = _formKey.currentState.validate();
     if (!isValid) {
       return;
     }
+
     _formKey.currentState.save();
-    widget._submitFn(
-        _userEmail.trim(), _userPassword, _userName.trim(), _isLogin, context);
+    widget._submitFn(_userEmail.trim(), _userPassword, _userName.trim(),
+        _userImageFile, _isLogin, context);
     // User those value to send auth request to firebase
+  }
+
+  void _pickedImage(File image) {
+    _userImageFile = image;
   }
 
   @override
@@ -44,7 +59,10 @@ class _AuthFormState extends State<AuthForm> {
                 child: Column(
                   mainAxisSize: MainAxisSize.min,
                   children: [
-                    UserImagePicker(),
+                    if (!_isLogin)
+                      UserImagePicker(
+                        imagePickFn: _pickedImage,
+                      ),
                     TextFormField(
                       key: ValueKey('email'),
                       validator: (value) {
