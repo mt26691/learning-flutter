@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 import 'package:learn_flutter/screens/auth_screen.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:learn_flutter/screens/chat_screen.dart';
+import 'package:learn_flutter/screens/splash_screen.dart';
 
 bool USE_FIRESTORE_EMULATOR = false;
 
@@ -50,6 +51,9 @@ class MyApp extends StatelessWidget {
         home: StreamBuilder(
           stream: FirebaseAuth.instance.authStateChanges(),
           builder: (context, userSnapShot) {
+            if (userSnapShot.connectionState == ConnectionState.waiting) {
+              return SlashScreen();
+            }
             if (userSnapShot.hasData) {
               return ChatScreen();
             }
